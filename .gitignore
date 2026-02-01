@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+
+# Splunk internal junk
+*.log
+
+# OS files
+.DS_Store

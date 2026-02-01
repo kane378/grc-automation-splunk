@@ -1,0 +1,5 @@
+sqlite3 grc_risk.db
+.tables
+SELECT * FROM risk_decisions;
+1|DESKTOP-01|4|1|30|HIGH|2026-02-01 10:30|FAIL|REVIEW
+2|DESKTOP-01|1|0|5|LOW|2026-02-01 11:10|PASS|PASS

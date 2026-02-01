@@ -1,0 +1,2 @@
+host,failed_logins,privileged_logins,risk_score,severity,evaluated_time
+DESKTOP-01,4,1,30,HIGH,2026-02-01 10:30:00

@@ -1,0 +1,14 @@
+Windows → Splunk → AI Scoring → Backend → Dashboard
+index=main sourcetype=WinEventLog:Security EventCode IN (4625,4672)
+| stats
+    count(eval(EventCode=4625)) as failed_logins
+    count(eval(EventCode=4672)) as privileged_logins
+    by host
+| eval risk_score=(failed_logins*5)+(privileged_logins*10)
+| eval severity=case(
+    risk_score>=30,"HIGH",
+    risk_score>=15,"MEDIUM",
+    true(),"LOW"
+)
+| eval evaluated_time=strftime(now(),"%Y-%m-%d %H:%M:%S")
+| outputlookup ai_risk_scores.csv
