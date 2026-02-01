@@ -1,148 +1,198 @@
-🛡️ Automated SOC-to-GRC Risk Assessment using Splunk & AI
-📌 Project Overview
+# 🛡️ AI-Assisted Automated GRC Control Monitoring using Splunk
 
-This project implements an automated SOC-to-GRC pipeline that converts raw Windows security events into governance-ready risk decisions. Using Splunk for log analytics and a backend AI-based decision engine, the system evaluates authentication and privileged access controls and exposes results through an interactive dashboard and REST APIs.
+---
 
-Unlike traditional SOC dashboards that focus only on alerts, this project demonstrates how SIEM data can directly support Governance, Risk, and Compliance (GRC) functions.
+## 📌 Project Overview
 
-🎯 Problem Statement
+This project implements an **automated SOC-to-GRC pipeline** that converts raw Windows security events into **governance-ready risk decisions**.
 
-Security teams receive thousands of authentication events daily, but:
+Using **Splunk** for log analytics and a **Python-based AI decision engine**, the system evaluates authentication and privileged access controls, calculates risk severity, detects anomalous login behavior using machine learning, and presents results through an interactive dashboard.
 
-GRC teams need control effectiveness, not raw logs
+Unlike traditional SOC dashboards that focus only on alerts, this project demonstrates how **SIEM data can directly support Governance, Risk, and Compliance (GRC) functions**.
 
-Manual audit evidence collection is slow and error-prone
+---
 
-Risk severity decisions depend heavily on human judgment
+## 🎯 Problem Statement
 
-This project bridges that gap by automatically mapping SOC alerts to GRC controls and generating explainable AI-driven risk decisions.
+Security teams generate thousands of authentication events daily, but:
 
-🧠 Key Concepts Implemented
+- GRC teams need **control effectiveness**, not raw logs  
+- Manual audit evidence collection is **slow and error-prone**  
+- Risk severity decisions depend heavily on **human judgment**
 
-SOC → GRC integration
+This project bridges that gap by automatically mapping SOC telemetry to GRC controls and generating **explainable, AI-assisted risk decisions**.
 
-Explainable AI (rule-based decision intelligence)
+---
 
-Control-level risk evaluation
+## 🧠 Key Concepts Implemented
 
-Automated compliance evidence generation
+- SOC → GRC integration  
+- Explainable AI (rule-based decision intelligence)  
+- Machine learning–based anomaly detection  
+- Control-level risk evaluation  
+- Automated compliance evidence generation  
+- Backend-driven dashboards using Flask  
 
-Backend-driven dashboards (no heavy frontend frameworks)
+---
 
-🏗️ Architecture
+## 🏗️ Architecture
+
 Windows Security Logs
-        ↓
+↓
 Splunk (SIEM)
-        ↓
+↓
 Control Evaluation (SPL)
-        ↓
-AI Risk Scoring (Weighted Logic)
-        ↓
+↓
+AI Risk & Anomaly Analysis
+↓
 CSV Lookup Output
-        ↓
+↓
 Python Backend Ingestion
-        ↓
-SQLite Database
-        ↓
-Flask REST APIs & Dashboard
+↓
+SQLite GRC Database
+↓
+Flask Dashboard
 
-🔍 Log Sources Used
-Event ID	Description
-4624	Successful login
-4625	Failed login
-4672	Privileged logon
-4634	Logoff
-🧩 GRC Controls Implemented
-🔐 Authentication Control
 
-Evaluates failed login behavior
+---
 
-Status: PASS / FAIL
+## 🔍 Log Sources Used
 
-👑 Privileged Access Control
+| Event ID | Description |
+|--------|------------|
+| 4624 | Successful login |
+| 4625 | Failed login |
+| 4672 | Privileged logon |
+| 4634 | Logoff |
 
-Evaluates privileged logins
+---
 
-Status: PASS / REVIEW
+## 🧩 GRC Controls Implemented
 
-🤖 AI Risk Logic (Explainable)
+### 🔐 Authentication Control
+- Evaluates failed login behavior  
+- Status: **PASS / FAIL**
 
-The system uses weighted risk scoring, not black-box ML:
+### 👑 Privileged Access Control
+- Evaluates privileged logins  
+- Status: **PASS / REVIEW**
 
-Factor	Weight
-Failed logins	High
-Privileged logins	Medium
+---
 
-Severity is inferred as:
+## 🤖 AI Component
 
-LOW
+### Explainable AI (Rule-Based)
 
-MEDIUM
+The system uses **weighted risk scoring** to infer severity:
 
-HIGH
+| Factor | Weight |
+|------|-------|
+| Failed logins | High |
+| Privileged logins | Medium |
 
-This approach ensures auditability and transparency, which is critical in GRC environments.
+Severity levels:
+- **LOW**
+- **MEDIUM**
+- **HIGH**
 
-📊 Dashboard Features
+This ensures **auditability and transparency**, which is critical in GRC environments.
 
-Interactive control-wise view
+---
 
-Authentication vs Privileged Access separation
+### AI Feature Engineering
 
-AI risk score & severity
+Raw Windows security events are transformed into behavioral features suitable for machine learning:
 
-Dynamic updates based on login behavior
+- Number of failed login attempts  
+- Number of privileged logins  
+- Time-of-day of authentication activity  
 
-Backend-rendered UI using Flask
+---
 
-🔗 REST API Endpoints
-Endpoint	Description
-/	Health check
-/api/risk/latest	Latest AI risk decision
-/api/risk/high	High / Critical risks
-/dashboard	Interactive GRC dashboard
-🛠️ Tech Stack
+### Machine Learning Model
 
-SIEM: Splunk
+An **Isolation Forest** algorithm is used for anomaly detection.
 
-Backend: Python, Flask
+- Unsupervised learning (no labels required)  
+- Learns normal authentication behavior  
+- Flags deviations as anomalous  
 
-Database: SQLite
+---
 
-OS Logs: Windows Security Events
+### AI and GRC Integration
 
-AI Logic: Rule-based explainable intelligence
+AI outputs are **not treated as alerts**.  
+Instead, anomaly results are correlated with GRC controls to **support governance decisions**.
 
-▶️ How to Run
-# Activate environment
+This enables:
+- Faster risk prioritization  
+- Reduced manual log review  
+- Continuous GRC intelligence  
+
+---
+
+### AI Outputs
+
+| Output | Description |
+|------|------------|
+| Anomaly Flag | NORMAL / ANOMALOUS |
+| Anomaly Score | Degree of abnormality |
+| Risk Score | Rule-based risk calculation |
+| Severity | LOW / MEDIUM / HIGH |
+
+All AI outputs are persisted in the GRC database for **audit and historical analysis**.
+
+---
+
+## 📊 Dashboard Features
+
+- Control-wise risk visualization  
+- Authentication vs Privileged Access separation  
+- AI anomaly status and severity  
+- Dynamic updates based on login behavior  
+- Backend-rendered UI using Flask  
+
+---
+
+## 🛠️ Tech Stack
+
+- **SIEM:** Splunk  
+- **Backend:** Python, Flask  
+- **Database:** SQLite  
+- **Logs:** Windows Security Events  
+- **AI:** Explainable logic + Isolation Forest  
+
+---
+
+## ▶️ How to Run
+
+```bash
+# Activate virtual environment
 source venv/bin/activate
 
 # Ingest latest AI risk scores
 python3 ingest_risk_scores.py
 
-# Start backend
+# Start dashboard
 python3 app.py
+Access the dashboard:
 
-
-Access dashboard:
-
-http://<KALI_IP>:5000/dashboard
-
+http://<KALI_IP>:5000
 🎬 How to Demo
+Generate login activity on Windows
 
-Show raw login logs in Splunk
+Show raw authentication logs in Splunk
 
-Show control evaluation SPL query
+Execute control evaluation SPL queries
 
-Show AI risk score output
+Run AI risk ingestion
 
-Refresh dashboard to show updated risk
+Refresh the dashboard
 
-Explain how controls map to governance decisions
+Explain governance-level decisions
 
 📈 Future Enhancements
-
-ML-based anomaly detection
+Advanced ML and ensemble anomaly detection
 
 Time-series risk trend analysis
 
@@ -150,13 +200,18 @@ ISO 27001 / NIST CSF control mapping
 
 Auto-refresh dashboard
 
-Integration with ticketing systems
+Ticketing and workflow system integration
+
+⚠️ Limitations
+AI requires sufficient historical authentication data
+
+Anomalies do not directly imply confirmed compromise
+
+Thresholds and models require periodic tuning
 
 🧠 Key Takeaway
-
-This project demonstrates how SIEM data can be transformed into continuous GRC intelligence, enabling faster and more informed risk decisions.
+This project demonstrates how SIEM data can be transformed into continuous, AI-assisted GRC intelligence, enabling faster, auditable, and governance-ready risk decisions.
 
 👨‍💻 Author
-
 Karthik Nallamamidi
 Cybersecurity | SOC | GRC | SIEM
